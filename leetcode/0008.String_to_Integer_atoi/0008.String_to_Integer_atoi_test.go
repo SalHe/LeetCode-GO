@@ -49,5 +49,6 @@ func Test_myAtoi(t *testing.T) {
 
 	for _, q := range qs {
 		assert.Equal(t, q.output, myAtoi(q.input), q.input)
+		assert.Equal(t, q.output, myAtoi_Automaton(q.input), q.input)
 	}
 }
