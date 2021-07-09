@@ -27,10 +27,8 @@ func longestValidParentheses(s string) int {
 
 				max1 := max[i]
 				if max1 > 0 && maxTails[i+pl*2-1] > 0 {
-					endpos := i + pl*2 - 1
-					start2 := endpos - maxTails[i+pl*2-1]*2 + 1
-					s2 := start2
-					pl2 := (endpos - s2 + 1) / 2
+					pl2 := maxTails[i+pl*2-1]
+					s2 := i + pl*2 - 1 - pl2*2 + 1
 					// 前面个条件等我再详细证明下，粗略地看是可以的
 					a[i][pl] = pl-max1-pl2 < 0 || a[i][max1] && a[i+max1*2][pl-max1-pl2] && a[s2][pl2]
 				}
