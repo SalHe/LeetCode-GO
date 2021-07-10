@@ -21,9 +21,13 @@ func search(nums []int, target int) int {
 	for ; k < n; k++ {
 		if k < n-1 && nums[k] > nums[k+1] {
 			k++
-			break
+			goto kFound
 		}
 	}
+	k = 0
+kFound:
+	// 其实可以不用这个goto，因为当找不到这样的k时
+	// 因为循环的正常结束有k=n，不过如果考虑溢出什么的话可以直接将k置0
 
 	// 二分查找
 	left := 0
