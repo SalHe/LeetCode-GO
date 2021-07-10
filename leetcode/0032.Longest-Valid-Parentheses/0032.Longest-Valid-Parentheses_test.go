@@ -55,6 +55,7 @@ func Test_longestValidParentheses(t *testing.T) {
 	}
 	for _, q := range qs {
 		assert.Equal(t, q.len, longestValidParentheses(q.str), q.str)
+		assert.Equal(t, q.len, longestValidParentheses_leetcodeOfficial(q.str), q.str)
 		// assert.Equal(t, q.len, longestValidParentheses_version1(q.str), q.str)
 	}
 }
