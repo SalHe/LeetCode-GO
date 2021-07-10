@@ -5,6 +5,44 @@ func longestValidParentheses(s string) int {
 	if n <= 0 {
 		return 0
 	}
+	a := make([]int, n-1)
+	t := make([]int, n)
+	max := 0
+	// 调用栈的开销很小，先忽略不计
+	save := func(i int, p int) {
+		a[i] = p
+		t[i+a[i]*2-1] = a[i]
+		max = a[i]
+	}
+	for pl := 1; pl <= n/2; pl++ {
+		for i := 0; i < n-pl*2+1; i++ {
+			if s[i] == '(' && s[i+pl*2-1] == ')' {
+				if pl == 1 {
+					save(i, pl)
+				} else { // && pl >= 2
+
+					if a[i+1] == pl-1 { // (....)
+						save(i, pl)
+					} else { // (****)....(****)
+						max1 := a[i]
+						max2 := t[i+pl*2-1]
+						rest := pl - max1 - max2
+						if rest <= 0 || a[i+max1*2] == rest {
+							save(i, pl)
+						}
+					}
+				}
+			}
+		}
+	}
+	return max * 2
+}
+
+func longestValidParentheses_version2(s string) int {
+	n := len(s)
+	if n <= 0 {
+		return 0
+	}
 
 	a := make([][]bool, n)
 	max, maxTails := make([]int, n), make([]int, n)
