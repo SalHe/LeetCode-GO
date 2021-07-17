@@ -35,8 +35,14 @@ func Test_firstMissingPositive(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := firstMissingPositive(tt.args.nums); got != tt.want {
+			bakup := make([]int, len(tt.args.nums))
+			copy(bakup, tt.args.nums)
+			if got := firstMissingPositive(bakup); got != tt.want {
 				t.Errorf("firstMissingPositive() = %v, want %v", got, tt.want)
+			}
+			copy(bakup, tt.args.nums)
+			if got := firstMissingPositive_exchange(bakup); got != tt.want {
+				t.Errorf("firstMissingPositive_exchange() = %v, want %v", got, tt.want)
 			}
 		})
 	}
