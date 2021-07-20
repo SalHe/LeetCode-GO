@@ -92,15 +92,26 @@ func Test_isMatch(t *testing.T) {
 			},
 			want: true,
 		},
+		{
+			name: "case11",
+			args: args{
+				s: "mississippi",
+				p: "m??*ss*?i*pi",
+			},
+			want: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := isMatch(tt.args.s, tt.args.p); got != tt.want {
 				t.Errorf("isMatch() = %v, want %v", got, tt.want)
 			}
-			if got := isMatch_dfs(tt.args.s, tt.args.p); got != tt.want {
+			if got := isMatch_greedy(tt.args.s, tt.args.p); got != tt.want {
 				t.Errorf("isMatch() = %v, want %v", got, tt.want)
 			}
+			// if got := isMatch_dfs(tt.args.s, tt.args.p); got != tt.want {
+			// 	t.Errorf("isMatch() = %v, want %v", got, tt.want)
+			// }
 		})
 	}
 }

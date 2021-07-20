@@ -1,5 +1,54 @@
 package leetcode
 
+func isMatch_greedy(s string, p string) bool {
+	for len(s) > 0 && len(p) > 0 && p[len(p)-1] != '*' {
+		if p[len(p)-1] == '?' || s[len(s)-1] == p[len(p)-1] {
+			s = s[:len(s)-1]
+			p = p[:len(p)-1]
+		} else {
+			return false
+		}
+	}
+	for len(s) > 0 && len(p) > 0 && p[0] != '*' {
+		if p[0] == '?' || s[0] == p[0] {
+			s = s[1:]
+			p = p[1:]
+		} else {
+			return false
+		}
+	}
+	if len(p) == 0 {
+		return len(s) == 0
+	}
+
+	is, ip := 0, 0
+	iss, isp := 0, 0
+	for is < len(s) && ip < len(p) {
+		ch1, ch2 := s[is], p[ip]
+		if ch2 == '*' {
+			ip++
+			isp = ip
+			iss = is
+		} else if ch2 == '?' || ch1 == ch2 {
+			is++
+			ip++
+		} else if iss < len(s)-1 {
+			iss++
+			is = iss
+			ip = isp
+		} else {
+			return false
+		}
+	}
+
+	for ; ip < len(p); ip++ {
+		if p[ip] != '*' {
+			return false
+		}
+	}
+	return true
+}
+
 func isMatch(s string, p string) bool {
 	ls, lp := len(s), len(p)
 	dp := make([][]bool, ls+1)
