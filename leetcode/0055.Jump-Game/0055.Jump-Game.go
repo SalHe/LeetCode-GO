@@ -1,22 +1,19 @@
 package leetcode
 
 func canJump(nums []int) bool {
-	n := len(nums) // >=1
-	dp := make([]bool, n)
-	target := n - 1
-
-	for i := n - 1; i >= 0; i-- {
-		if i+nums[i] >= target {
-			dp[i] = true
-		} else {
-			for dis := nums[i]; dis >= 1; dis-- {
-				if dp[i+dis] {
-					dp[i] = true
-					break
-				}
-			}
+	right := 0
+	target := len(nums) - 1
+	for i, num := range nums {
+		if i > right {
+			return false
+		}
+		nowRight := i + num
+		if nowRight > right {
+			right = nowRight
+		}
+		if right >= target {
+			return true
 		}
 	}
-
-	return dp[0]
+	return false
 }
