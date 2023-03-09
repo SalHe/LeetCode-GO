@@ -15,11 +15,13 @@ func minDistance(word1 string, word2 string) int {
 		return m
 	}
 
+	// DP分配
 	dp := make([][]int, m)
 	for i := 0; i < m; i++ {
 		dp[i] = make([]int, n)
 	}
 
+	// 初始化DP数组（对首行、首列单独处理）
 	if word1[0] != word2[0] {
 		dp[0][0] = 1
 	}
@@ -38,12 +40,23 @@ func minDistance(word1 string, word2 string) int {
 		}
 	}
 
+	// 开始DP过程
 	for i := 1; i < m; i++ {
 		for j := 1; j < n; j++ {
 			ch1, ch2 := word1[i], word2[j]
 			if ch1 == ch2 {
+				// "....a"
+				// "____a"
+				// 则步数为"...."与"____"的编辑距离
+
 				dp[i][j] = dp[i-1][j-1]
 			} else {
+				// "....a"
+				// "____b"
+				// 1. 将'a'替换成'b'或'b'替换成'a'
+				// 2. "____"变换到"....a"然后加上'b'
+				// 3. 类似2
+
 				dp[i][j] = min(min(dp[i][j-1], dp[i-1][j]), dp[i-1][j-1]) + 1
 			}
 		}
