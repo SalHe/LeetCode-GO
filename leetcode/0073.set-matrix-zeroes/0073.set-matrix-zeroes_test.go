@@ -51,7 +51,7 @@ func Test_setZeroes(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// s := fmt.Sprintf("%v", tt.matrix)
 			if setZeroes(tt.matrix); !reflect.DeepEqual(tt.matrix, tt.want) {
-				t.Errorf("simplifyPathCharByChar() = %v, want %v", tt.matrix, tt.want)
+				t.Errorf("setZeroes() = %v, want %v", tt.matrix, tt.want)
 			}
 		})
 	}
