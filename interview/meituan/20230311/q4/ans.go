@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+
+	"github.com/buger/goterm"
+)
 
 // 没来得及提交
 
@@ -36,6 +41,13 @@ func solve(a *player, b *player) (int, string) {
 			bull.shot(a)
 			bull.shot(b)
 		}
+
+		show(taken,
+			map[*player]int{
+				a: goterm.RED,
+				b: goterm.GREEN,
+			})
+
 		bullets = []*bullet{}
 		if a.dead && b.dead || a.x == b.x && a.y == b.y {
 			return i, "P"
@@ -52,18 +64,20 @@ func solve(a *player, b *player) (int, string) {
 	}
 
 	aTaken := 0
+	bTaken := 0
 	for _, players := range taken {
 		for _, p := range players {
 			if p == a {
 				aTaken++
+			} else {
+				bTaken++
 			}
 		}
 	}
-	bTake := boardSize*boardSize - aTaken
-	if aTaken == bTake {
+	if aTaken == bTaken {
 		return maxS, "P"
 	}
-	if aTaken > bTake {
+	if aTaken > bTaken {
 		return maxS, "D"
 	}
 	return maxS, "W"
@@ -85,10 +99,23 @@ func control(a, b *player, i int, bullets *[]*bullet, taken [][]*player) {
 		dx, dy = a.instructions[i].move()
 		x = a.x + dx
 		y = a.y + dy
-		if taken[y][x] != b {
-			a.x = x
-			a.y = y
-			taken[y][x] = a
+		if x < 0 || x >= boardSize || y < 0 || y >= boardSize {
+			// switch a.dir {
+			// case UP:
+			// 	a.dir = DOWN
+			// case DOWN:
+			// 	a.dir = UP
+			// case LEFT:
+			// 	a.dir = LEFT
+			// case RIGHT:
+			// 	a.dir = RIGHT
+			// }
+		} else {
+			if taken[y][x] != b {
+				a.x = x
+				a.y = y
+				taken[y][x] = a
+			}
 		}
 	}
 }
@@ -170,3 +197,43 @@ func (i instruction) move() (dx, dy int) {
 	}
 	return moves[i][0], moves[i][1]
 }
+
+// region DEBUG
+
+var shows = map[instruction]string{
+	LEFT:  "←",
+	RIGHT: "→",
+	UP:    "↑",
+	DOWN:  "↓",
+	SHOOT: "*",
+}
+
+func show(taken [][]*player, colors map[*player]int) {
+	goterm.Clear()
+	for y, players := range taken {
+		for x, p := range players {
+			if p != nil {
+				goterm.MoveCursor(x+1, y+1)
+				s := "-"
+				if p.x == x && p.y == y {
+					if p.dead {
+						s = "×"
+					} else {
+						s = shows[p.dir]
+					}
+					if p.shoot == SHOOT {
+						s = goterm.Background(s, goterm.CYAN)
+					}
+				}
+				s = goterm.Color(s, colors[p])
+				goterm.Print(s)
+
+			}
+		}
+	}
+	goterm.Println()
+	goterm.Flush()
+	time.Sleep(time.Second / 5)
+}
+
+// endregion
