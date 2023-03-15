@@ -18,6 +18,13 @@ func Test_maximalRectangle(t *testing.T) {
 			},
 			want: 6,
 		},
+		{
+			name: "case2",
+			matrix: [][]byte{
+				{'1'},
+			},
+			want: 1,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
